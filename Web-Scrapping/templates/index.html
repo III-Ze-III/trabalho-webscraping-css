@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper</title>
+</head>
+<body>
+    
+    <header>
+        <h1>Web Scraper</h1>
+    </header>
+
+    <main>
+
+        <div class="scraper-form">
+            <form action="/scrape" method="post">
+                <label for="category">Select a category:</label>
+                <select id="category" name="category" required>
+                    {% for category in categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Scrape</button>
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>
