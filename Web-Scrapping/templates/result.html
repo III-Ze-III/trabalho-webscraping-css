@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados da busca</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Resultados da busca</h1>
+    </header>
+
+    <main>
+        <p class="results-summary">Categoria selecionada: <strong>{{ selected_category }}</strong></p>
+
+        <section class="analise" aria-labelledby="summary-title">
+            <h2 id="summary-title">Resumo dos resultados</h2>
+            <p><strong>Produtos encontrados:</strong> {{ stats.count }}</p>
+            <p>
+                <strong>Produto de menor preço:</strong>
+                {% if stats.lowest_price %}
+                    {% if stats.lowest_price.url %}
+                        <a href="{{ stats.lowest_price.url }}" target="_blank" rel="noopener noreferrer">{{ stats.lowest_price.name or 'Nome indisponível' }}</a>
+                    {% else %}
+                        {{ stats.lowest_price.name or 'Nome indisponível' }}
+                    {% endif %}
+                    — {{ stats.lowest_price.price or 'Preço indisponível' }}
+                {% else %}
+                    Não disponível
+                {% endif %}
+            </p>
+            <p>
+                <strong>Produto de maior preço:</strong>
+                {% if stats.highest_price %}
+                    {% if stats.highest_price.url %}
+                        <a href="{{ stats.highest_price.url }}" target="_blank" rel="noopener noreferrer">{{ stats.highest_price.name or 'Nome indisponível' }}</a>
+                    {% else %}
+                        {{ stats.highest_price.name or 'Nome indisponível' }}
+                    {% endif %}
+                    — {{ stats.highest_price.price or 'Preço indisponível' }}
+                {% else %}
+                    Não disponível
+                {% endif %}
+            </p>
+            <p><strong>Preço médio:</strong> {{ stats.average_price or 'Não disponível' }}</p>
+            <p>
+                <strong>Produto com melhor avaliação:</strong>
+                {% if stats.best_rated %}
+                    {% if stats.best_rated.url %}
+                        <a href="{{ stats.best_rated.url }}" target="_blank" rel="noopener noreferrer">{{ stats.best_rated.name or 'Nome indisponível' }}</a>
+                    {% else %}
+                        {{ stats.best_rated.name or 'Nome indisponível' }}
+                    {% endif %}
+                    — {{ stats.best_rated.rating or 'Avaliação indisponível' }}
+                {% else %}
+                    Não disponível
+                {% endif %}
+            </p>
+        </section>
+
+        {% if products %}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Preço</th>
+                            <th>Categoria</th>
+                            <th>Avaliação</th>
+                            <th>Link do produto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td>{{ product.name or 'Não disponível' }}</td>
+                                <td>{{ product.price or 'Não disponível' }}</td>
+                                <td>{{ product.category or 'Não disponível' }}</td>
+                                <td>{{ product.rating or 'Não disponível' }}</td>
+                                <td>
+                                    {% if product.url %}
+                                        <a href="{{ product.url }}" target="_blank" rel="noopener noreferrer">Ver produto</a>
+                                    {% else %}
+                                        Não disponível
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="empty-results">Nenhum produto encontrado nesta categoria.</p>
+        {% endif %}
+
+        <a class="back-link" href="{{ url_for('index') }}">Voltar à busca</a>
+    </main>
+</body>
+</html>
